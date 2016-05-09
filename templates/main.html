@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="author" content="Jonathan Ben-Ammi">
+	<title></title>
+	<meta name="description" content="">
+	<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/style.css')}}">
+		<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/materialize.css')}}">
+	
+</head>
+<body>
+	<nav>
+		<div class="nav-wrapper blue-grey">
+			<div class="nav-wrapper container">
+				<p id="logo-container" class="brand-logo left">CodingDojo Wall</p>
+			</div>	
+		</div>
+	</nav>
+	<br>
+	<br>
+	<div class="container">
+		<div class="row">	
+			<div class="col s6">
+				{% if session['passmatch'] %}
+				<p class="red-text">{{session['passmatch']}}</p>
+				{% endif %}
+				{% if session['notreg'] %}
+				<p class="red-text">{{session['notreg']}}</p>
+				{% endif %}				<form action="/login" method="post">
+					<div class="input-row">
+						{% if session['err_email2'] %}
+						<p class="red-text">{{session['err_email2']}}</p>
+						{% endif %}
+						<label>E-Mail</label>
+						<input type="email" name="email" />
+					</div>
+					<div class="input-row">
+						{% if session['err_password2'] %}
+						<p class="red-text">{{session['err_password2']}}</p>
+						{% endif %}
+						<label>Password</label>
+						<input type="password" name="password" />
+					</div>
+					<div class="input-row">
+						<button class="btn waves-effect waves-light blue-grey lighten-1" type="sumbit">Login</button>
+					</div>
+				</form>
+				{% if session['registered'] %}
+				<div>
+				<p>Thank you for Registering. Please Log in</p>
+				</div>
+				{% endif %}
+			</div>
+			<div class="col s6">
+				{% if session['user_registered'] %}
+				<p class="red-text">{{session['user_registered']}}</p>
+				{% endif %}
+				<form action="/process" method="post">
+					<div class="input-row">
+						{% if session['err_fname'] %}
+						<p class="red-text">{{session['err_fname']}}</p>
+						{% endif %}
+						<label>First Name</label>
+						<input type="text" name="fname" />
+					</div>
+					<div class="input-row">
+						{% if session['err_lname'] %}
+						<p class="red-text">{{session['err_lname']}}</p>
+						{% endif %}
+						<label>Last Name</label>
+						<input type="text" name="lname" />
+					</div>
+					<div class="input-row">
+						{% if session['err_email'] %}
+						<p class="red-text">{{session['err_email']}}</p>
+						{% endif %}
+						<label>E-Mail</label>
+						<input type="email" name="email" />
+					</div>
+					<div class="input-row">
+						{% if session['err_password'] %}
+						<p class="red-text">{{session['err_password']}}</p>
+						{% endif %}
+						<label>Password</label>
+						<input type="password" name="password" />
+					</div>
+					<div class="input-row">
+						{% if session['err_confirm'] %}
+						<p class="red-text">{{session['err_confirm']}}</p>
+						{% endif %}
+						<label>Confirm Password</label>
+						<input type="password" name="confirmpass" />
+					</div>
+					<div class="input-row">
+						<button class="btn waves-effect waves-light blue-grey lighten-1" type="sumbit">Register</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<script src="{{url_for('static', filename='js/jquery-2.2.3.js')}}"></script>
+	<script src="{{url_for('static', filename='js/materialize.js')}}"</script>
+	<script type="text/javascript">
+	$(document).ready(function(){
+
+	$(".button-collapse").sideNav();
+	    
+	})
+
+	</script>
+</body>
+</html>

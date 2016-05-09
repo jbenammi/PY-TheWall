@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="Jonathan Ben-Ammi">
+    <title>The Wall</title>
+    <meta name="description" content="This is a Python Assignment for CodingDojo">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/style.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/materialize.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/materialize_icons.css')}}"></head>
+<body>
+    <nav class="blue-grey" role="navigation">
+        <div class="nav-wrapper container">
+        <p id="logo-container" class="brand-logo left">CodingDojo Wall</p>
+            <ul class="right hide-on-med-and-down">
+                <li><a href="/wall">Welcome {{session['logged_info']['first_name']}}</a></li>
+                <li><a href="/logout">Log off</a></li>
+            </ul>
+        <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+            <ul id="nav-mobile" class="side-nav">
+                <li>Welcome {{session['logged_info']['first_name']}}</li>
+                <li><a href="/logout">Log off</a></li>
+            </ul>
+        </div>
+    </nav>
+    <br>
+    <div class="container">
+        <div class="row">
+           {% if session['del_msg'] %}
+            <p class="red-text">{{session['del_msg']}} <a class="remove" href="/wall/remove_warning"><button class="btn-floating-sml red"><i class="mini material-icons">close</i></button></a></p>
+            {% endif %}
+
+            <h4 class="col s12 light">Post a message</h4>
+            <form class="col s8 offset-s2"action="/wall/message/{{session['logged_info']['id']}}" method="post">
+                <textarea name="message" class="materialize-textarea"></textarea>
+                 <button class="btn waves-effect waves-light right blue-grey lighten-1" type="submit">Post a Message<i class="material-icons right">message</i></button>
+            </form>
+        </div>
+    </div>
+
+    <div id="messageMain" class=" container">
+            {% if all_messages %}
+            {% for message_info in all_messages %}
+        <div id="message" class="row">
+            <h5 class="col s9">{{message_info['author']}}  {% if message_info['users_id'] == session['logged_info']['id'] %}
+                    <a class="remove" href="/wall/message/delete/{{message_info['message_id']}}/{{message_info['created_on']}}"><button class="btn-floating-sml red" value="{{message_info['created_on']}}"><i class="mini material-icons">close</i></button></a>
+                    {% endif %} </h5>
+            <h6 class="col s3 right-align v-align-btm">{{message_info['created_on'].strftime('%a %b %d, %Y %I:%M %p')}}</h6>
+        </div>    
+        <div class="col s12">
+            <p class="btm-margin">{{message_info['message']}}</p>
+        </div>            
+                {% for comment_info in all_comments %}
+                    {% if comment_info['messages_id'] == message_info['message_id']%}
+                <div id="comment" class="row">
+                    <h5 class="col s6 offset-s3">{{comment_info['author']}}</h5>
+                    <h6 class="col s3 right-align v-align-btm">{{comment_info['created_on'].strftime('%a %b %d, %Y %I:%M %p')}}</h6>
+                <div class="col s9 offset-s3">
+                    <p>{{comment_info['comment']}}</p>
+                </div>
+                </div>
+            {% endif %}
+            {% endfor %}
+        <div class="row col s6 offset-s6">
+        <h6 class="col s6 offset-s6">comment:</h6>
+        <form class="col s6 offset-s6" action="/wall/comment/{{message_info['message_id']}}/{{session['logged_info']['id']}}" method="post">
+            <textarea name="comment" class="materialize-textarea"></textarea>
+            <input type="hidden" value="{{session['logged_info']['id']}}" name="author_id" />
+            <button class="btn waves-effect waves-light green white-text right" type="submit">comment<i class="material-icons right">comment</i></button>
+        </form>
+        </div>
+        <div class="divider row col s12"></div>
+        {% endfor %}
+        {% endif %}
+    </div>
+    
+
+  
+
+
+    <!-- JS Script -->
+    <script src="{{url_for('static', filename='js/jquery-2.2.3.js')}}"></script>
+    <script src="{{url_for('static', filename='js/materialize.js')}}"</script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+
+        $(".button-collapse").sideNav();
+            
+        })
+
+        // $(document).on('click', '.remove', function() {
+        //     if( now()-1200000 <= parse($(this).children('button').val())) {
+        //         window.location = $(this).val();
+        //     }
+        //     else {
+        //         $(this).remove();
+        //     }
+
+        // } )
+
+    </script>
+</body>
+</html>
