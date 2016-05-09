@@ -22,22 +22,23 @@
 	<div class="container">
 		<div class="row">	
 			<div class="col s6">
-				{% if session['errors'] %}
-				<p class="red-text">{{session['errors']['passmatch']}}</p>
+				{% with errors = get_flashed_messages()%}
+				{% if errors and errors[0] %}
+				<p class="red-text">{{errors[0]['passmatch']}}</p>
 				{% endif %}
-				{% if session['errors'] %}
-				<p class="red-text">{{session['errors']['notreg']}}</p>
+				{% if errors and errors[0] %}
+				<p class="red-text">{{errors[0]['notreg']}}</p>
 				{% endif %}				<form action="/login" method="post">
 					<div class="input-row">
-						{% if session['errors'] %}
-						<p class="red-text">{{session['errors']['email2']}}</p>
+						{% if errors and errors[0] %}
+						<p class="red-text">{{errors[0]['email2']}}</p>
 						{% endif %}
 						<label>E-Mail</label>
 						<input type="email" name="email" />
 					</div>
 					<div class="input-row">
-						{% if session['errors'] %}
-						<p class="red-text">{{session['errors']['password2']}}</p>
+						{% if errors and errors[0] %}
+						<p class="red-text">{{errors[0]['password2']}}</p>
 						{% endif %}
 						<label>Password</label>
 						<input type="password" name="password" />
@@ -53,41 +54,42 @@
 				{% endif %}
 			</div>
 			<div class="col s6">
-				{% if session['errors'] %}
-				<p class="red-text">{{session['errors']['user_registered']}}</p>
+
+				{% if errors and errors[0] %}
+				<p class="red-text">{{errors[0]['user_registered']}}</p>
 				{% endif %}
 				<form action="/process" method="post">
 					<div class="input-row">
-						{% if session['errors'] %}
-						<p class="red-text">{{session['errors']['fname']}}</p>
+						{% if errors and errors[0] %}
+						<p class="red-text">{{errors[0]['fname']}}</p>
 						{% endif %}
 						<label>First Name</label>
 						<input type="text" name="fname" />
 					</div>
 					<div class="input-row">
-						{% if session['errors'] %}
-						<p class="red-text">{{session['errors']['lname']}}</p>
+						{% if errors and errors[0] %}
+						<p class="red-text">{{errors[0]['lname']}}</p>
 						{% endif %}
 						<label>Last Name</label>
 						<input type="text" name="lname" />
 					</div>
 					<div class="input-row">
-						{% if session['errors'] %}
-						<p class="red-text">{{session['errors']['email']}}</p>
+						{% if errors and errors[0] %}
+						<p class="red-text">{{errors[0]['email']}}</p>
 						{% endif %}
 						<label>E-Mail</label>
 						<input type="email" name="email" />
 					</div>
 					<div class="input-row">
-						{% if session['errors'] %}
-						<p class="red-text">{{session['errors']['password']}}</p>
+						{% if errors and errors[0] %}
+						<p class="red-text">{{errors[0]['password']}}</p>
 						{% endif %}
 						<label>Password</label>
 						<input type="password" name="password" />
 					</div>
 					<div class="input-row">
-						{% if session['errors'] %}
-						<p class="red-text">{{session['errors']['confirmpass']}}</p>
+						{% if errors and errors[0] %}
+						<p class="red-text">{{errors[0]['confirmpass']}}</p>
 						{% endif %}
 						<label>Confirm Password</label>
 						<input type="password" name="confirmpass" />
@@ -96,6 +98,7 @@
 						<button class="btn waves-effect waves-light blue-grey lighten-1" type="sumbit">Register</button>
 					</div>
 				</form>
+				{% endwith %}
 			</div>
 		</div>
 	</div>

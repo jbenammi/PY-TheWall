@@ -1,4 +1,4 @@
-from flask import Flask, redirect, session, render_template, request
+from flask import Flask, redirect, session, render_template, request, flash
 from mysqlconnection import MySQLConnector
 import re, datetime
 from flask.ext.bcrypt import Bcrypt
@@ -19,6 +19,7 @@ def validate_login():
 	if len(request.form['password']) < 8:
 		session['errors'].update({'password2': 'Password must be at least 8 characters'})
 	if len(session['errors']) > 0:
+		flash(session['errors'])
 		return redirect('/')
 	else:
 		query = "SELECT * FROM users WHERE email = :email LIMIT 1"
@@ -33,6 +34,7 @@ def validate_login():
 				return redirect('/wall')
 			else:
 				session['errors'].update({'passmatch': 'Incorrect password entered for registered E-Mail.'})
+				flash(session['errors'])
 				return redirect('/')
 
 @app.route('/wall')
@@ -43,6 +45,13 @@ def welcome():
 	query2 = "SELECT comments.id AS comment_id, comments.comment, comments.created_on, messages_id, users_id, concat(users.first_name, ' ', users.last_name) AS author FROM comments LEFT JOIN users ON users.id = comments.users_id"
 	all_messages = mysql.query_db(query1)
 	all_comments = mysql.query_db(query2)
+	now = datetime.datetime.now()
+	for message in all_messages:
+		newTime =  now - message['created_on']
+		if newTime.seconds/60 <= 30:
+			message.update({'btn': True})
+		else:
+			message.update({'btn': False})
 	return render_template('user_wall.html', all_messages = all_messages, all_comments = all_comments)
 
 @app.route('/wall/message/<id>', methods = ['POST'])
@@ -66,26 +75,25 @@ def add_comment(msg_id, usr_id):
 	mysql.query_db(query, info)
 	return redirect('/wall')
 
-@app.route('/wall/message/delete/<message_id>/<time>')
-def remove_message(message_id, time):
+@app.route('/wall/message/delete/<message_id>')
+def remove_message(message_id):
 	if 'del_msg' in session:
 		del session['del_msg']
+
+
 	query1 = "DELETE FROM comments WHERE messages_id = :message_id"
-	info1 = {
-			'message_id': message_id
-			}
 	query2 = "DELETE FROM messages WHERE id = :message_id"
-	info2 = {
+	info = {
 			'message_id': message_id
 			}
+	msg_time = mysql.query_db("SELECT created_on FROM messages WHERE id = :message_id", info)
 	now = datetime.datetime.now()
-	timea = datetime.datetime.strptime(time, '%Y-%m-%d %H:%M:%S')
-	newTime = now - timea
+	newTime = now - msg_time[0]['created_on']
 	if newTime.seconds/60 <= 30:
-		mysql.query_db(query1, info1)
-		mysql.query_db(query2, info2)
+		mysql.query_db(query1, info)
+		mysql.query_db(query2, info)
 	else:
-		session['del_msg'] = "Sorry but message can only be deleted if done within 20 minutes of creating it."
+		session['del_msg'] = "Sorry but message can only be deleted if done within 30 minutes of creating it."
 	return redirect('/wall')
 
 @app.route('/wall/remove_warning')
@@ -115,6 +123,7 @@ def validate_():
 	if request.form['confirmpass'] != request.form['password']:
 		session['errors'].update({'confirmpass': 'The password confirmation does not match the password'})
 	if len(session['errors']) > 0:
+		flash(session['errors'])
 		return render_template('main.html')
 	else:
 		query1 = "SELECT email FROM users WHERE email = :email"
