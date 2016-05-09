@@ -22,22 +22,22 @@
 	<div class="container">
 		<div class="row">	
 			<div class="col s6">
-				{% if session['passmatch'] %}
-				<p class="red-text">{{session['passmatch']}}</p>
+				{% if session['errors'] %}
+				<p class="red-text">{{session['errors']['passmatch']}}</p>
 				{% endif %}
-				{% if session['notreg'] %}
-				<p class="red-text">{{session['notreg']}}</p>
+				{% if session['errors'] %}
+				<p class="red-text">{{session['errors']['notreg']}}</p>
 				{% endif %}				<form action="/login" method="post">
 					<div class="input-row">
-						{% if session['err_email2'] %}
-						<p class="red-text">{{session['err_email2']}}</p>
+						{% if session['errors'] %}
+						<p class="red-text">{{session['errors']['email2']}}</p>
 						{% endif %}
 						<label>E-Mail</label>
 						<input type="email" name="email" />
 					</div>
 					<div class="input-row">
-						{% if session['err_password2'] %}
-						<p class="red-text">{{session['err_password2']}}</p>
+						{% if session['errors'] %}
+						<p class="red-text">{{session['errors']['password2']}}</p>
 						{% endif %}
 						<label>Password</label>
 						<input type="password" name="password" />
@@ -53,41 +53,41 @@
 				{% endif %}
 			</div>
 			<div class="col s6">
-				{% if session['user_registered'] %}
-				<p class="red-text">{{session['user_registered']}}</p>
+				{% if session['errors'] %}
+				<p class="red-text">{{session['errors']['user_registered']}}</p>
 				{% endif %}
 				<form action="/process" method="post">
 					<div class="input-row">
-						{% if session['err_fname'] %}
-						<p class="red-text">{{session['err_fname']}}</p>
+						{% if session['errors'] %}
+						<p class="red-text">{{session['errors']['fname']}}</p>
 						{% endif %}
 						<label>First Name</label>
 						<input type="text" name="fname" />
 					</div>
 					<div class="input-row">
-						{% if session['err_lname'] %}
-						<p class="red-text">{{session['err_lname']}}</p>
+						{% if session['errors'] %}
+						<p class="red-text">{{session['errors']['lname']}}</p>
 						{% endif %}
 						<label>Last Name</label>
 						<input type="text" name="lname" />
 					</div>
 					<div class="input-row">
-						{% if session['err_email'] %}
-						<p class="red-text">{{session['err_email']}}</p>
+						{% if session['errors'] %}
+						<p class="red-text">{{session['errors']['email']}}</p>
 						{% endif %}
 						<label>E-Mail</label>
 						<input type="email" name="email" />
 					</div>
 					<div class="input-row">
-						{% if session['err_password'] %}
-						<p class="red-text">{{session['err_password']}}</p>
+						{% if session['errors'] %}
+						<p class="red-text">{{session['errors']['password']}}</p>
 						{% endif %}
 						<label>Password</label>
 						<input type="password" name="password" />
 					</div>
 					<div class="input-row">
-						{% if session['err_confirm'] %}
-						<p class="red-text">{{session['err_confirm']}}</p>
+						{% if session['errors'] %}
+						<p class="red-text">{{session['errors']['confirmpass']}}</p>
 						{% endif %}
 						<label>Confirm Password</label>
 						<input type="password" name="confirmpass" />
